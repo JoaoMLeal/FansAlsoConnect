@@ -1,12 +1,8 @@
 {% load static %}
+{% load plotly_dash %}
+<script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
 {% block content %}
-    {% load plotly_dash %}
     <h1>Hello</h1>
-    <br>
-    <div class="{% plotly_class name='SimpleExample' %} card">
-    {% plotly_app name='SimpleExample' ratio=0.65 %}
-    </div>
     {{ plot | safe}}
-
 
 {% endblock %}

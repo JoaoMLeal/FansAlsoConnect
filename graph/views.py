@@ -6,8 +6,8 @@ from plotly.offline import plot
 import networkx as nx
 
 
-def plotly_stuff():
-    G = nx.random_geometric_graph(200, 0.125)
+def plotly_stuff(G):
+    #G = nx.random_geometric_graph(200, 0.125)
     edge_x = []
     edge_y = []
     for edge in G.edges():
@@ -88,7 +88,20 @@ def index(request):
 def home_view(request, *args, **kwargs):
     #return HttpResponse("<h1>Hello World</h1>")
 
+    G = nx.random_geometric_graph(200, 0.125)
+
+    G1 = nx.Graph()
+    G1.add_node(1)
+    G1.add_nodes_from([2, 3])
+    G1.add_edge(1, 2)
+    G1.add_edges_from([(1, 3)])
+    print(G1)
+
+    pos = {v: [i for i in range(2)] for v in G1.nodes}
+    nx.set_node_attributes(G, pos, "pos")
+
     context = {
-        'plot': plotly_stuff()
+        'plot': plotly_stuff(G)
     }
+
     return render(request, "home.html", context)
