@@ -4,6 +4,7 @@ import tekore as tk
 import plotly.graph_objects as go
 from plotly.offline import plot
 import networkx as nx
+import graph.spotify as spotify
 
 
 def plotly_stuff(G):
@@ -89,19 +90,21 @@ def home_view(request, *args, **kwargs):
     #return HttpResponse("<h1>Hello World</h1>")
 
     G = nx.random_geometric_graph(200, 0.125)
+    img = spotify.get_image("536BYVgOnRky0xjsPT96zl")
 
     G1 = nx.Graph()
-    G1.add_node(1)
+    G1.add_node(1, image=img)
     G1.add_nodes_from([2, 3])
     G1.add_edge(1, 2)
     G1.add_edges_from([(1, 3)])
-    print(G1)
 
-    pos = {v: [i for i in range(2)] for v in G1.nodes}
-    nx.set_node_attributes(G, pos, "pos")
+    nodePos = nx.random_layout(G1)
+    nx.set_node_attributes(G1, nodePos, "pos")
+
 
     context = {
-        'plot': plotly_stuff(G)
+        'plot': plotly_stuff(G1),
+        'album': spotify.spotify_stuff(),
     }
 
     return render(request, "home.html", context)
