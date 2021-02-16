@@ -9,7 +9,7 @@ https://docs.djangoproject.com/en/3.1/topics/settings/
 For the full list of settings and their values, see
 https://docs.djangoproject.com/en/3.1/ref/settings/
 """
-import os
+
 from pathlib import Path
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
@@ -20,7 +20,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # See https://docs.djangoproject.com/en/3.1/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'xv@w(o!y-fz$nvw9k@hi+2x4q+_pg#dil7pg+#qw$9nw-^6=$m'
+SECRET_KEY = 'wtn0$tru)sx3nz(3s3l$v002lmd-jbiz8@^ocmb0%dm+u^e6rr'
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
@@ -37,10 +37,6 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'graph',
-    'django_plotly_dash.apps.DjangoPlotlyDashConfig',
-    'channels',
-    'channels_redis',
 ]
 
 MIDDLEWARE = [
@@ -51,7 +47,6 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
-    'django_plotly_dash.middleware.BaseMiddleware',
 ]
 
 ROOT_URLCONF = 'FansAlsoConnect.urls'
@@ -72,8 +67,6 @@ TEMPLATES = [
         },
     },
 ]
-
-X_FRAME_OPTIONS = 'SAMEORIGIN'
 
 WSGI_APPLICATION = 'FansAlsoConnect.wsgi.application'
 
@@ -120,30 +113,6 @@ USE_I18N = True
 USE_L10N = True
 
 USE_TZ = True
-
-ASGI_APPLICATION = 'graph.routing.application'
-CHANNEL_LAYERS = {
-    'default': {
-        'BACKEND': 'channels_redis.core.RedisChannelLayer',
-        'CONFIG': {
-            'hosts': [('127.0.0.1', 6379),],
-        }
-    }
-}
-
-STATICFILES_FINDERS = {
-    'django.contrib.staticfiles.finders.FileSystemFinder',
-    'django.contrib.staticfiles.finders.AppDirectoriesFinder',
-    'django_plotly_dash.finders.DashAssetFinder',
-    'django_plotly_dash.finders.DashComponentFinder',
-}
-
-PLOTLY_COMPONENTS = [
-    'dash_core_components',
-    'dash_html_components',
-    'dash_renderer',
-    'dpd_components',
-]
 
 
 # Static files (CSS, JavaScript, Images)
