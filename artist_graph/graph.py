@@ -2,26 +2,34 @@ import networkx as nx
 
 from bokeh.io import output_file, show
 from bokeh.models import (BoxZoomTool, Circle, HoverTool,
-                          MultiLine, Plot, Range1d, ResetTool, ImageURL,)
+                          MultiLine, Plot, Range1d, ResetTool, ImageURL, ImageRGBA, )
 from bokeh.palettes import Spectral4
 from bokeh.plotting import from_networkx, figure
 from bokeh.embed import components
 
+from artist_graph.spotify import get_image
+
+import numpy
+
 import bokeh
+
 
 def bokeh_test(G):
     # Prepare Data
 
-    plot = figure(title="Networkx Integration Demonstration", x_range=(-1.1, 1.1), y_range=(-1.1, 1.1),
-                  tools="", toolbar_location=None)
+    plot = Plot(sizing_mode='scale_both', x_range=Range1d(-1.1, 1.1), y_range=Range1d(-1.1, 1.1),
+                toolbar_location=None)
 
-    plot = Plot(plot_width=400, plot_height=400,
-                x_range=Range1d(-1.1, 1.1), y_range=Range1d(-1.1, 1.1))
+    graph_renderer = from_networkx(G, nx.circular_layout, center=(0, 0))
 
-    graph = from_networkx(G, nx.circular_layout, center=(0, 0))
+    plot.renderers.append(graph_renderer)
 
-    # print(graph.layout(plot=plot, side="x"))
+    # im = get_image()
+    # im = im.convert("RGBA")
+    # imarray = numpy.array(im)
 
-    plot.renderers.append(graph)
+    image3 = ImageURL(url="url", w=0.1, h=0.1, anchor="center")
+    graph_renderer.node_renderer.data_source.data["url"] = [get_image()]*3
+    graph_renderer.node_renderer.glyph = image3
 
-    return components(plot)
+    return components(plot), plot

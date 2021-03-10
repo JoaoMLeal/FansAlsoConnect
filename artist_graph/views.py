@@ -9,10 +9,10 @@ from artist_graph.graph import bokeh_test
 
 def home_view(request, *args, **kwargs):
 
-    img = spotify.get_image("536BYVgOnRky0xjsPT96zl")
+    # img = spotify.get_image("536BYVgOnRky0xjsPT96zl")
 
     G1 = nx.Graph()
-    G1.add_node(1)#, image=numpy.array(img))
+    G1.add_node(1)
     G1.add_nodes_from([2, 3])
     G1.add_edge(1, 2)
     G1.add_edges_from([(1, 3)])
@@ -20,9 +20,9 @@ def home_view(request, *args, **kwargs):
     nodePos = nx.random_layout(G1)
     nx.set_node_attributes(G1, nodePos, "pos")
 
-    script, div = bokeh_test(G1)
+    (script, div), plot = bokeh_test(G1)
 
-    context = {'world': 'world',
+    context = {'world': "world",
                'script': script,
                'div': div,
                'album': spotify.spotify_stuff(),

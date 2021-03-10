@@ -1,13 +1,18 @@
 from io import BytesIO
+import json
 import tekore as tk
 import requests
 from PIL import Image
 
-client_id = 'dff21b856c2f4618a94b22a44c8c0a6f'
-client_secret = '9995bff098c64c85bb99477c89a8a468'
-token = tk.request_client_token(client_id, client_secret)
+with open("D:\Projects\FansAlsoConnect\\artist_graph\\token.json") as f:
+    data = json.load(f)
+
+client_id = data['client_id']
+client_secret = data['client_secret']
+token = tk.request_client_token(client_id=client_id, client_secret=client_secret)
 spotify = tk.Spotify(token)
 
+too_door = "536BYVgOnRky0xjsPT96zl"
 # Too Door Cinema Club: 536BYVgOnRky0xjsPT96zl
 
 
@@ -23,9 +28,10 @@ def spotify_stuff():
     return div
 
 
-def get_image(artist):
-    img_url = spotify.artist(artist).images[0].url
-    return Image.open(BytesIO(requests.get(img_url).content))
+def get_image(artist=too_door):
+    return spotify.artist(artist).images[0].url
+    #return Image.open(BytesIO(requests.get(img_url).content))
+
 
 
 
