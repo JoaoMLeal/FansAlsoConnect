@@ -1,4 +1,17 @@
+<style>
+
+.centered {
+    margin: 0 auto;
+    display:block;
+    text-align: left;
+    width: 800px;
+}
+
+</style>
+
+
 {% extends 'base.html' %}
+
 
 {% block head %}
     <link href="https://cdn.pydata.org/bokeh/release/bokeh-2.2.3.min.css" rel="stylesheet" type="text/css">
@@ -11,7 +24,10 @@
 {% endblock %}
 
 {% block body %}
-    <h1> Hello </h1>
-    {{ world }}
+{#    <h1> Hello </h1>#}
+{#    {{ debug }}#}
+    <div class="centered">
     {{ div | safe }}
+    </div>
+
 {% endblock %}

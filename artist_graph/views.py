@@ -1,31 +1,19 @@
 from django.shortcuts import render
 import networkx as nx
-import artist_graph.spotify as spotify
 import numpy
 
 # Create your views here.
-from artist_graph.graph import bokeh_test
+from artist_graph.graph import get_plot
 
 
 def home_view(request, *args, **kwargs):
 
-    # img = spotify.get_image("536BYVgOnRky0xjsPT96zl")
+    #(script, div) = bokeh_test()
+    (script, div), debug = get_plot()
 
-    G1 = nx.Graph()
-    G1.add_node(1)
-    G1.add_nodes_from([2, 3])
-    G1.add_edge(1, 2)
-    G1.add_edges_from([(1, 3)])
-
-    nodePos = nx.random_layout(G1)
-    nx.set_node_attributes(G1, nodePos, "pos")
-
-    (script, div), plot = bokeh_test(G1)
-
-    context = {'world': "world",
+    context = {'debug': "0",
                'script': script,
                'div': div,
-               'album': spotify.spotify_stuff(),
                }
 
     return render(request, 'home.html', context)
