@@ -7,11 +7,9 @@ from artist_graph.graph import get_plot
 
 
 def home_view(request, *args, **kwargs):
-
-    #(script, div) = bokeh_test()
     (script, div), debug = get_plot()
 
-    context = {'debug': "0",
+    context = {'debug': debug,
                'script': script,
                'div': div,
                }
