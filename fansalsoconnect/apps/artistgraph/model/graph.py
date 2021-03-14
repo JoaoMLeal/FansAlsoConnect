@@ -3,7 +3,7 @@ import numpy as np
 from PIL import Image, ImageDraw, ImageFilter
 import requests
 
-import artist_graph.spotify as sp
+import fansalsoconnect.apps.artistgraph.spotify as sp
 
 
 class Graph:
@@ -15,17 +15,17 @@ class Graph:
     def make_related_artists_graph(self, artist):
         n = self.graph.number_of_nodes()
         if not (n in self.graph):
-            self.graph.add_node(n, id=artist)
+            self.graph.add_node(n, artist_id=artist, artist_name="Too Door Cinema Club")
             n += 1
 
         artists = sp.get_related_artists_id(artist)
         for a in artists:
-            self.graph.add_node(n, id=a)
+            self.graph.add_node(n, artist_id=a, artist_name="aaa")
             self.graph.add_edge(0, n)
             n += 1
 
     def image_url_list(self):
-        return [sp.get_artist_image_url(data['id']) for (n, data) in self.graph.nodes.data()]
+        return [sp.get_artist_image_url(data['artist_id']) for (n, data) in self.graph.nodes.data()]
 
     def image_rgba_list(self):
         urls = self.image_url_list()

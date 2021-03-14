@@ -1,12 +1,14 @@
+import os
+
 import networkx as nx
 import requests
 from PIL import Image, ImageDraw, ImageFilter
 import numpy
 import math
 
-import artist_graph.spotify as sp
-from artist_graph.models.artist import Artist
-from artist_graph.models.graph import Graph, GraphImage
+import fansalsoconnect.apps.artistgraph.spotify as sp
+from fansalsoconnect.apps.artistgraph.model.artist import Artist
+from fansalsoconnect.apps.artistgraph.model.graph import Graph, GraphImage
 
 import bokeh
 from bokeh.io import output_file, show
@@ -35,34 +37,34 @@ def get_plot():
     graph_renderer.node_renderer.glyph = images
 
     ### start of layout code
-    N = 21
-    node_indices = list(range(N))
-
+    node_indices = graph_renderer.node_renderer.data_source.data['index']
     graph_layout = graph_renderer.layout_provider.graph_layout
 
     ### Draw quadratic bezier paths
     def quad_bezier(start, end, control, steps):
         return [(1 - s) ** 2 * start + 2 * (1 - s) * s * control + s ** 2 * end for s in steps]
 
-    def lin_bezier(start, end, steps):
-        return [(start + 0.075) + s * ((end + 0.075) - (start + 0.075)) for s in steps]
+    def lin_bezier(start, end, steps, offset=0.075):
+        return [(start + offset) + s * ((end + offset) - (start + offset)) for s in steps]
 
     xs, ys = [], []
     sx, sy = graph_layout[0]
     steps = [i / 100. for i in range(100)]
-    for node_index in node_indices:
+    for node_index in node_indices[1:]:
         ex, ey = graph_layout[node_index]
         xs.append(lin_bezier(sx, ex, steps))
         ys.append(lin_bezier(sy, ey, steps))
+
     graph_renderer.edge_renderer.data_source.data['xs'] = xs
     graph_renderer.edge_renderer.data_source.data['ys'] = ys
 
-    return components(plot), (graph_renderer.node_renderer.glyph.dh, graph_renderer.node_renderer.glyph.dw)
+    return components(plot), "debug"
 
 
 def make_plot():
     tooltips = [
-        ("id", "@id"),
+        ("id", "@artist_id"),
+        ("name", "@artist_name")
     ]
 
     plot = Plot(sizing_mode='scale_both',
@@ -70,8 +72,3 @@ def make_plot():
                 toolbar_location=None)
     plot.add_tools(TapTool(), HoverTool(tooltips=tooltips))
     return plot
-
-
-
-
-

@@ -3,7 +3,7 @@ import networkx as nx
 import numpy
 
 # Create your views here.
-from artist_graph.graph import get_plot
+from fansalsoconnect.apps.artistgraph.graph import get_plot
 
 
 def home_view(request, *args, **kwargs):

@@ -1,17 +1,19 @@
+import os
 from io import BytesIO
 import json
 import tekore as tk
 import requests
 from PIL import Image
 
-with open("D:\Projects\FansAlsoConnect\\artist_graph\\token.json") as f:
+from fansalsoconnect.apps.artistgraph.model.artist import Artist
+
+with open(os.getcwd() + "\FansAlsoConnect\\apps\\artist_graph\\token.json") as f:
     data = json.load(f)
 
 client_id = data['client_id']
 client_secret = data['client_secret']
 token = tk.request_client_token(client_id=client_id, client_secret=client_secret)
 spotify = tk.Spotify(token)
-
 too_door = "536BYVgOnRky0xjsPT96zl"
 coldplay = "4gzpq5DPGxSnKTe4SA8HAU"
 
