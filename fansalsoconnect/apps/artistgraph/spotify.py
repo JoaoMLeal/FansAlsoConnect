@@ -7,7 +7,7 @@ from PIL import Image
 
 from fansalsoconnect.apps.artistgraph.model.artist import Artist
 
-with open(os.getcwd() + "\FansAlsoConnect\\apps\\artist_graph\\token.json") as f:
+with open(os.getcwd() + "\\token.json") as f:
     data = json.load(f)
 
 client_id = data['client_id']

@@ -1,11 +1,13 @@
-# FansAlsoConnect
+## FansAlsoConnect
 
-\> Tekore + Plotly + Django
+This project allows users to see how the "Related Artists" section of Spotify branches out and to find new artists
 
-Tekore + igraph
+## Dependencies
 
-Tekore + networkx
+This project is built on Python/Django. It uses Tekore to interface with Spotify and Networkx + Bokeh to build the graphs.
 
-Tekore + graph-tools
+## Future Ideas
 
-https://github.com/plotly/postMessage-API#listen
+- Shortest path between 2 artists
+- Shortest path between all artists with a playlist as input
+- Organize tree based on artist popularity and genre

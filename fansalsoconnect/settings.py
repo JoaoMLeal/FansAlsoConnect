@@ -37,7 +37,7 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'FansAlsoConnect.apps.artistgraph'
+    'fansalsoconnect.apps.artistgraph'
 ]
 
 MIDDLEWARE = [
@@ -50,7 +50,7 @@ MIDDLEWARE = [
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
 
-ROOT_URLCONF = 'FansAlsoConnect.urls'
+ROOT_URLCONF = 'fansalsoconnect.urls'
 
 TEMPLATES = [
     {
@@ -69,7 +69,7 @@ TEMPLATES = [
     },
 ]
 
-WSGI_APPLICATION = 'FansAlsoConnect.wsgi.application'
+WSGI_APPLICATION = 'fansalsoconnect.wsgi.application'
 
 
 # Database
