@@ -4,7 +4,7 @@ This project allows users to see how the "Related Artists" section of Spotify br
 
 ## Dependencies
 
-This project is built on Python/Django. It uses Tekore to interface with Spotify and Networkx + Bokeh to build the graphs.
+It is built on Python/Django. It uses Tekore to interface with Spotify and Networkx + Bokeh to build the graphs.
 
 ## Future Ideas
 

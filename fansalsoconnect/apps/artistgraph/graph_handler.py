@@ -3,29 +3,34 @@ import numpy as np
 from PIL import Image, ImageDraw, ImageFilter
 import requests
 
-import fansalsoconnect.apps.artistgraph.spotify as sp
+import fansalsoconnect.apps.artistgraph.spotify_handler as sp
+import fansalsoconnect.apps.artistgraph.models as models
 
 
-class Graph:
+class GraphHandler:
 
     def __init__(self):
         self.graph = nx.Graph()
-        self.make_related_artists_graph(sp.too_door)
+        self.spotify_handler = sp.SpotifyHandler()
+        self.make_starting_graph()
 
-    def make_related_artists_graph(self, artist):
-        n = self.graph.number_of_nodes()
-        if not (n in self.graph):
-            self.graph.add_node(n, artist_id=artist, artist_name="Too Door Cinema Club")
-            n += 1
 
-        artists = sp.get_related_artists_id(artist)
+    def make_starting_graph(self):
+        n = 0
+        artist = self.spotify_handler.get_starting_artist()
+        self.graph.add_node(n, artist_id=artist.id, artist_name=artist.name, artist_url=artist.image_url)
+        n += 1
+
+        artists = artist.related_artists.all()
         for a in artists:
-            self.graph.add_node(n, artist_id=a, artist_name="aaa")
+            self.graph.add_node(n, artist_id=a.id, artist_name=a.name, artist_url=a.image_url)
             self.graph.add_edge(0, n)
             n += 1
 
+
     def image_url_list(self):
-        return [sp.get_artist_image_url(data['artist_id']) for (n, data) in self.graph.nodes.data()]
+        all_artists = models.Artist.objects.all()
+        return [artist.image_url for artist in all_artists]
 
     def image_rgba_list(self):
         urls = self.image_url_list()
