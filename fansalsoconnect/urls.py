@@ -15,10 +15,25 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path
+from django.apps import apps
+from django.conf import settings
 
-from fansalsoconnect.apps.artistgraph.views import home_view
+import bokeh
+from bokeh.server.django import autoload, directory, document, static_extensions
+
+from fansalsoconnect.apps.artistgraph.views import spotify_graph, spotify_graph_handler
+
+bokeh_app_config = apps.get_app_config('bokeh.server.django')
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('', home_view, name='home'),
+    path('spotify_graph/', spotify_graph, name='spotify_graph'),
+    path('', spotify_graph, name='home'),
 ]
+
+base_path = settings.BASE_PATH
+
+bokeh_apps = [
+    autoload("spotify_graph", spotify_graph_handler),
+]
+

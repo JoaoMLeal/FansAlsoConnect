@@ -9,11 +9,15 @@ https://docs.djangoproject.com/en/3.1/topics/settings/
 For the full list of settings and their values, see
 https://docs.djangoproject.com/en/3.1/ref/settings/
 """
-import os
+from os.path import abspath, dirname, join
 from pathlib import Path
 
+from bokeh.settings import bokehjsdir
+
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
-BASE_DIR = Path(__file__).resolve().parent.parent
+MODULE_DIR = dirname(abspath(__file__))
+BASE_DIR = dirname(MODULE_DIR)
+BASE_PATH = Path(BASE_DIR)
 
 
 # Quick-start development settings - unsuitable for production
@@ -37,6 +41,8 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'channels',
+    'bokeh.server.django',
     'fansalsoconnect.apps.artistgraph'
 ]
 
@@ -55,8 +61,7 @@ ROOT_URLCONF = 'fansalsoconnect.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [os.path.join(BASE_DIR, 'templates')]
-        ,
+        'DIRS': [join(BASE_DIR, "templates")],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -69,7 +74,7 @@ TEMPLATES = [
     },
 ]
 
-WSGI_APPLICATION = 'fansalsoconnect.wsgi.application'
+ASGI_APPLICATION = 'fansalsoconnect.routing.application'
 
 
 # Database
@@ -78,7 +83,7 @@ WSGI_APPLICATION = 'fansalsoconnect.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
+        'NAME': join(BASE_DIR, 'db.sqlite3'),
     }
 }
 
@@ -120,3 +125,7 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/3.1/howto/static-files/
 
 STATIC_URL = '/static/'
+
+STATICFILES_DIRS = [bokehjsdir()]
+
+THEMES_DIR = join(MODULE_DIR, "themes")

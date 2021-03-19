@@ -31,7 +31,7 @@ class SpotifyHandler:
     def get_artist_data(self, artist_id):
         artist = self.tk_spotify.artist(artist_id)
         name = artist.name
-        url = artist.images[0].url
+        url = artist.images[2].url
         return name, url
 
     def get_related_artists_data(self, artist=coldplay):

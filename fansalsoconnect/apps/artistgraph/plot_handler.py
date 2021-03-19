@@ -9,7 +9,7 @@ import math
 from fansalsoconnect.apps.artistgraph.graph_handler import GraphHandler, GraphImage
 
 import bokeh
-from bokeh.io import output_file, show
+from bokeh.io import output_file, show, curdoc
 from bokeh.models import (BoxZoomTool, Circle, HoverTool,
                           MultiLine, Plot, Range1d, ResetTool, ImageURL, ImageRGBA, TapTool, StaticLayoutProvider,
                           CustomJS, )
@@ -17,7 +17,6 @@ from bokeh.palettes import Spectral4
 from bokeh.plotting import from_networkx, figure
 from bokeh.embed import components
 from bokeh.events import Tap
-
 
 def get_plot():
     gh = GraphHandler()
@@ -29,7 +28,7 @@ def get_plot():
     node_images(graph_renderer, gh)
     make_edges(graph_renderer)
 
-    return components(plot), "debug"
+    return plot
 
 
 def make_plot():
