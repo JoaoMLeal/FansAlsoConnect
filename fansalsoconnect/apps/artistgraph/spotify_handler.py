@@ -36,7 +36,7 @@ class SpotifyHandler:
 
     def get_related_artists_data(self, artist=coldplay):
         artists = self.tk_spotify.artist_related_artists(artist)
-        artist_array = [(a.id, a.name, a.images[0].url) for a in artists]
+        artist_array = [(a.id, a.name, a.images[2].url) for a in artists]
         return artist_array
 
     ## Working with models

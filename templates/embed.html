@@ -6,10 +6,23 @@
   <title>Let's GO</title>
 </head>
 
+<style>
+
+.centered {
+    margin: 0 auto;
+    display:block;
+    text-align: left;
+    width: 800px;
+}
+
+</style>
+
 <body>
   <div>
     This Bokeh app below is served by a Django server (via autoload.js) (hopefully):
   </div>
+  <div class="centered">
   {{ script|safe }}
+  </div>
 </body>
 </html>

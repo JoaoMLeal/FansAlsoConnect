@@ -28,12 +28,11 @@ bokeh_app_config = apps.get_app_config('bokeh.server.django')
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('spotify_graph/', spotify_graph, name='spotify_graph'),
-    path('', spotify_graph, name='home'),
 ]
 
 base_path = settings.BASE_PATH
 
 bokeh_apps = [
-    autoload("spotify_graph", spotify_graph_handler),
+    autoload('spotify_graph', spotify_graph_handler),
 ]
 
