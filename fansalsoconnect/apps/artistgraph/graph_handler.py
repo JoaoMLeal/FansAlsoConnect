@@ -12,7 +12,7 @@ from fansalsoconnect.apps.artistgraph.request_type import RequestType
 class GraphHandler:
 
     def __init__(self, type, id=""):
-        self.graph = nx.Graph()
+        self.graph = nx.DiGraph()
         self.spotify_handler = sp.SpotifyHandler()
 
         if type == RequestType.Empty:
@@ -43,12 +43,6 @@ class GraphHandler:
             for ra in a.related_artists.all():
                 self.graph.add_node(ra.index, artist_id=ra.id, artist_name=ra.name, artist_url=ra.image_url)
                 self.graph.add_edge(a.index, ra.index)
-                print(a.name, ra.name)
-
-        fig = plt.figure(figsize=(12, 12))
-        nx.draw(self.graph, nx.spring_layout(self.graph))
-        plt.tight_layout()
-        plt.savefig("Graph.png", format="PNG")
 
 
     def image_url_list(self):
