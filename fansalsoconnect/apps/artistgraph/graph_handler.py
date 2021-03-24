@@ -2,35 +2,59 @@ import networkx as nx
 import numpy as np
 from PIL import Image, ImageDraw, ImageFilter
 import requests
+import matplotlib.pyplot as plt
 
 import fansalsoconnect.apps.artistgraph.spotify_handler as sp
 import fansalsoconnect.apps.artistgraph.models as models
+from fansalsoconnect.apps.artistgraph.request_type import RequestType
 
 
 class GraphHandler:
 
-    def __init__(self):
+    def __init__(self, type, id=""):
         self.graph = nx.Graph()
         self.spotify_handler = sp.SpotifyHandler()
-        self.make_starting_graph()
+
+        if type == RequestType.Empty:
+            pass
+        elif type == RequestType.SingleArtist:
+            self.make_single_artist_graph(id)
+        elif type == RequestType.Playlist:
+            self.make_playlist_graph(id)
 
 
-    def make_starting_graph(self):
-        n = 0
-        artist = self.spotify_handler.get_starting_artist()
-        self.graph.add_node(n, artist_id=artist.id, artist_name=artist.name, artist_url=artist.image_url)
-        n += 1
+    def get_artist_ids(self):
+        return [id for node, id in self.graph.nodes(data='artist_id')]
 
-        artists = artist.related_artists.all()
+
+    def make_single_artist_graph(self, artist_id):
+        artist = self.spotify_handler.get_single_artist(artist_id)
+        self.graph.add_node(artist.index, artist_id=artist.id, artist_name=artist.name, artist_url=artist.image_url)
+
+        related_artists = artist.related_artists.all()
+        for ra in related_artists:
+            self.graph.add_node(ra.index, artist_id=ra.id, artist_name=ra.name, artist_url=ra.image_url)
+            self.graph.add_edge(artist.index, ra.index)
+
+    def make_playlist_graph(self, playlist_id):
+        artists = self.spotify_handler.get_playlist_artists(playlist_id)
         for a in artists:
-            self.graph.add_node(n, artist_id=a.id, artist_name=a.name, artist_url=a.image_url)
-            self.graph.add_edge(0, n)
-            n += 1
+            self.graph.add_node(a.index, artist_id=a.id, artist_name=a.name, artist_url=a.image_url)
+            for ra in a.related_artists.all():
+                self.graph.add_node(ra.index, artist_id=ra.id, artist_name=ra.name, artist_url=ra.image_url)
+                self.graph.add_edge(a.index, ra.index)
+                print(a.name, ra.name)
+
+        fig = plt.figure(figsize=(12, 12))
+        nx.draw(self.graph, nx.spring_layout(self.graph))
+        plt.tight_layout()
+        plt.savefig("Graph.png", format="PNG")
 
 
     def image_url_list(self):
-        all_artists = models.Artist.objects.all()
-        return [artist.image_url for artist in all_artists]
+        artist_ids = self.get_artist_ids()
+        graph_artists = models.Artist.objects.filter(pk__in=artist_ids)
+        return [artist.image_url for artist in graph_artists]
 
     def image_rgba_list(self):
         urls = self.image_url_list()
