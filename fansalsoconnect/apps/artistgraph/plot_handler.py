@@ -21,7 +21,7 @@ from bokeh.embed import components
 from bokeh.events import Tap
 from functools import partial
 
-PLOT_SCALE = 0.4
+PLOT_SCALE = 1
 PLOT_RANGE = 1.1
 PLOT_LAYOUT = nx.spring_layout
 PLOT_GLYPH_SIZE = 0.02
@@ -33,6 +33,7 @@ class PlotHandler:
         self.plot = self.empty_plot()
 
     def get_plot(self, type, id):
+        print(type, id)
         self.graph_handler = GraphHandler(type, id)
 
         graph_renderer = from_networkx(self.graph_handler.graph, PLOT_LAYOUT, center=(0, 0), scale=PLOT_SCALE)
@@ -54,7 +55,8 @@ class PlotHandler:
 
         plot = Plot(sizing_mode='scale_both', max_height=1000, max_width=1000,
                     x_range=Range1d(-1.1, 1.1), y_range=Range1d(-1.1, 1.1),
-                    outline_line_color=None, name='main_plot')
+                    outline_line_color=None, name='main_plot',
+                    toolbar_location=None, output_backend="webgl")
         plot.add_tools(hover_tool, wheel_zoom_tool, reset_tool, pan_tool)
         plot.toolbar.active_scroll = wheel_zoom_tool
 
@@ -63,10 +65,13 @@ class PlotHandler:
 
         return plot
 
+
     def node_images(self):
         graph_renderer = self.plot.renderers[0]
         images = ImageRGBA(image="image", x=0, y=0, dw=PLOT_GLYPH_SIZE, dh=PLOT_GLYPH_SIZE)
-        graph_renderer.node_renderer.data_source.data["image"] = self.graph_handler.image_rgba_list()
+
+        artist_urls = graph_renderer.node_renderer.data_source.data['artist_url']
+        graph_renderer.node_renderer.data_source.data["image"] = self.graph_handler.image_rgba_list(artist_urls)
 
         # images = ImageURL(url="url", x=0, y=0, w=0.1, h=0.1, anchor="center")
         # graph_renderer.node_renderer.data_source.data["url"] = graph.image_url_list()
@@ -85,7 +90,7 @@ class PlotHandler:
             return [(start + offset) + s * ((end + offset) - (start + offset)) for s in steps]
 
         xs, ys = [], []
-        steps = [i / 100. for i in range(100)]
+        steps = [i / 50. for i in range(50)]
         for node_index in node_indices:
             x1, y1 = graph_layout[node_index]
             edges = graph.edges(node_index)

@@ -21,7 +21,6 @@ class SpotifyHandler:
         client_secret = data['client_secret']
         token = tk.request_client_token(client_id=client_id, client_secret=client_secret)
         self.tk_spotify = tk.Spotify(token)
-        self.index = 0
 
     def get_single_artist(self, artist_id):
         artist = self.create_artist(artist_id, *self.get_artist_data(artist_id))
@@ -48,15 +47,13 @@ class SpotifyHandler:
         if query.exists():
             return query[0]
         else:
-            artist = models.Artist(id=id, name=name, image_url=url, index=self.index)
+            artist = models.Artist(id=id, name=name, image_url=url)
             artist.save()
-            self.index += 1
             return artist
 
     def add_related_artist(self, artist1, artist2):
         artist1.related_artists.add(artist2)
         artist1.save()
-
 
     def get_playlist_artists(self, playlist_id):
         artists = []
@@ -73,7 +70,6 @@ class SpotifyHandler:
                         artists.append(related_artist)
                     self.add_related_artist(artist, related_artist)
         return artists
-
 
     def get_artist_image(self, artist):
         images = artist.images

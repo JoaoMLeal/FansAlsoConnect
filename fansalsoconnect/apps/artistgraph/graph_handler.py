@@ -22,37 +22,28 @@ class GraphHandler:
         elif type == RequestType.Playlist:
             self.make_playlist_graph(id)
 
-
     def get_artist_ids(self):
         return [id for node, id in self.graph.nodes(data='artist_id')]
 
-
     def make_single_artist_graph(self, artist_id):
         artist = self.spotify_handler.get_single_artist(artist_id)
-        self.graph.add_node(artist.index, artist_id=artist.id, artist_name=artist.name, artist_url=artist.image_url)
+        self.graph.add_node(artist.id, artist_id=artist.id, artist_name=artist.name, artist_url=artist.image_url)
 
         related_artists = artist.related_artists.all()
         for ra in related_artists:
-            self.graph.add_node(ra.index, artist_id=ra.id, artist_name=ra.name, artist_url=ra.image_url)
-            self.graph.add_edge(artist.index, ra.index)
+            self.graph.add_node(ra.id, artist_id=ra.id, artist_name=ra.name, artist_url=ra.image_url)
+            self.graph.add_edge(artist.id, ra.id)
 
     def make_playlist_graph(self, playlist_id):
         artists = self.spotify_handler.get_playlist_artists(playlist_id)
         for a in artists:
-            self.graph.add_node(a.index, artist_id=a.id, artist_name=a.name, artist_url=a.image_url)
+            self.graph.add_node(a.id, artist_id=a.id, artist_name=a.name, artist_url=a.image_url)
             for ra in a.related_artists.all():
-                self.graph.add_node(ra.index, artist_id=ra.id, artist_name=ra.name, artist_url=ra.image_url)
-                self.graph.add_edge(a.index, ra.index)
+                self.graph.add_node(ra.id, artist_id=ra.id, artist_name=ra.name, artist_url=ra.image_url)
+                self.graph.add_edge(a.id, ra.id)
 
-
-    def image_url_list(self):
-        artist_ids = self.get_artist_ids()
-        graph_artists = models.Artist.objects.filter(pk__in=artist_ids)
-        return [artist.image_url for artist in graph_artists]
-
-    def image_rgba_list(self):
-        urls = self.image_url_list()
-        rgbas = [GraphImage(url).to_rgba_array() for url in urls]
+    def image_rgba_list(self, artist_urls):
+        rgbas = [GraphImage(url).to_rgba_array() for url in artist_urls]
         return rgbas
 
 
